@@ -23,35 +23,37 @@ driver = webdriver.Chrome(options=options)
 def content_crawl(url):
     driver.get(url)
     time.sleep(0.5)
-    try:
-        driver.find_element_by_xpath('//*[@id="ct"]/div[1]/div[3]/div[3]/div[2]/div[1]/a').click()
-        #//*[@id="ct"]/div[1]/div[3]/div[3]/div[2]/div[1]/a
-        #//*[@id="main_content"]/div[1]/div[3]/div/div[3]/div[2]/div[1]/a
-    except :
-        print(url)
-    finally:
-        time.sleep(5)
-        #Beautifulsoup 생성
-        html = driver.page_source
-        soup = BeautifulSoup(html, 'html.parser')
+    # try:
+    #     driver.find_element_by_xpath('//*[@id="ct"]/div[1]/div[3]/div[3]/div[2]/div[1]/a').click()
+    #     #//*[@id="ct"]/div[1]/div[3]/div[3]/div[2]/div[1]/a
+    #     #//*[@id="main_content"]/div[1]/div[3]/div/div[3]/div[2]/div[1]/a
+    # except :
+    #     print(url)
+    # finally:
+    #     time.sleep(5)
+    #     #Beautifulsoup 생성
+    #     html = driver.page_source
+    #     soup = BeautifulSoup(html, 'html.parser')
 
-        #데이터 크롤
-        # Date = soup.select_one("span.t11")
-        # Date=str(Date)
-        # Date=Date[18:]
-        # Date=Date[:-7]
-        #Title = soup.find('h3',id="articleTitle")
-        Title = soup.select_one("#ct > div.media_end_head.go_trans > div.media_end_head_info.nv_notrans > div.media_end_head_info_variety > div.media_end_head_info_variety_right > div.media_end_head_autosummary._auto_summary_wrapper._SUMMARY._LIKE_HIDE > div.media_end_head_autosummary_layer._auto_summary_contents._SUMMARY_LAYER > div.media_end_head_autosummary_layer_body > div > strong")
-        Title=str(Title)
-        Title=Title[53:]
-        Title=Title[:-9]
-        Summary = soup.select_one("#ct > div.media_end_head.go_trans > div.media_end_head_info.nv_notrans > div.media_end_head_info_variety > div.media_end_head_info_variety_right > div.media_end_head_autosummary._auto_summary_wrapper._SUMMARY._LIKE_HIDE > div.media_end_head_autosummary_layer._auto_summary_contents._SUMMARY_LAYER > div.media_end_head_autosummary_layer_body > div")
-        Summary=str(Summary)
-        Summary=Summary[50:]
-        Summary=Summary[:-6]
+    #     #데이터 크롤
+    #     # Date = soup.select_one("span.t11")
+    #     # Date=str(Date)
+    #     # Date=Date[18:]
+    #     # Date=Date[:-7]
+    #     #Title = soup.find('h3',id="articleTitle")
+    #     Title = soup.select_one("#ct > div.media_end_head.go_trans > div.media_end_head_info.nv_notrans > div.media_end_head_info_variety > div.media_end_head_info_variety_right > div.media_end_head_autosummary._auto_summary_wrapper._SUMMARY._LIKE_HIDE > div.media_end_head_autosummary_layer._auto_summary_contents._SUMMARY_LAYER > div.media_end_head_autosummary_layer_body > div > strong")
+    #     Title=str(Title)
+    #     Title=Title[53:]
+    #     Title=Title[:-9]
+    #     Summary = soup.select_one("#ct > div.media_end_head.go_trans > div.media_end_head_info.nv_notrans > div.media_end_head_info_variety > div.media_end_head_info_variety_right > div.media_end_head_autosummary._auto_summary_wrapper._SUMMARY._LIKE_HIDE > div.media_end_head_autosummary_layer._auto_summary_contents._SUMMARY_LAYER > div.media_end_head_autosummary_layer_body > div")
+    #     Summary=str(Summary)
+    #     Summary=Summary[50:]
+    #     Summary=Summary[:-6]
 
-        print(Title)
-        print(Summary)
-        
+    #     print(Title)
+    #     print(Summary)
+    html = driver.page_source
+    soup = BeautifulSoup(html, 'html.parser')
+    Title = soup.select_one('#ct > div.media_end_head.go_trans > div.media_end_head_title > h2')
 
 content_crawl('https://n.news.naver.com/mnews/article/469/0000674672')

@@ -134,6 +134,7 @@ def content_crawl(url):
     row.append(Title)
     row.append(url)
     crawled_data.append(row)
+    print(row)
     #wr.writerow(row)
     #csv 닫기
     #fd.close()
@@ -151,6 +152,7 @@ if __name__=='__main__':
     pool = Pool(processes=8)
     pool.map(content_crawl, url_crawl(startdate, finishdate))
     #프로그램 종료
-    print('content crawling finish')
     for line in crawled_data:
         print(line)
+    print('content crawling finish')
+    
