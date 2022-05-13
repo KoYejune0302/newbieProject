@@ -71,12 +71,15 @@ def url_crawl(startdate, finishdate):
 
 
 def content_crawl(url):
+    global crawled_data
+    
     #뉴스기사 저장용 csv 파일 생성
-    #fd = open('output.csv', 'w', encoding='utf-8-sig', newline='')
-    #wr = csv.writer(fd,delimiter=',')
+    # fd = open('output.csv', 'w', encoding='utf-8-sig', newline='')
+    # wr = csv.writer(fd,delimiter=',')
+    # wr.writerow(['Title','URL'])
     # wr.writerow(['Date','Title','Summary'])
     #wr.writerow(['Title','Summary'])
-    #wr.writerow(['Title','URL'])
+    
 
 
     #url별로 뉴스 크롤링
@@ -134,10 +137,11 @@ def content_crawl(url):
     row.append(Title)
     row.append(url)
     crawled_data.append(row)
-    print(row)
-    #wr.writerow(row)
-    #csv 닫기
-    #fd.close()
+
+    fd = open('output.csv', 'a', encoding='utf-8-sig', newline='')
+    wr = csv.writer(fd,delimiter=',')
+    wr.writerow(row)
+    fd.close()
 
 
 
@@ -149,10 +153,13 @@ if __name__=='__main__':
     input_finish_date = input('끝나는 날짜를 입력하세요(YYYYMMDD) : ')
     finishdate = datetime.date(int(input_finish_date[0:4]), int(input_finish_date[4:6]), int(input_finish_date[6:8]))
 
+    fd = open('output.csv', 'w', encoding='utf-8-sig', newline='')
+    wr = csv.writer(fd,delimiter=',')
+    wr.writerow(['Title','URL'])
+    fd.close()
+
+
     pool = Pool(processes=8)
     pool.map(content_crawl, url_crawl(startdate, finishdate))
-    #프로그램 종료
-    for line in crawled_data:
-        print(line)
     print('content crawling finish')
     
