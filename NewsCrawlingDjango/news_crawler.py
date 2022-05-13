@@ -9,9 +9,16 @@ import time
 from bs4 import BeautifulSoup
 import requests
 import csv
-import pandas as pd
 import datetime
 from multiprocessing import Pool
+# import os
+
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', "NewsCrawlingDjango.settings")
+# import django 
+# django.setup()
+
+# from crawled_data.models import BoardData
+
 
 global crawled_data
 crawled_data = list()
@@ -63,7 +70,6 @@ def url_crawl(startdate, finishdate):
                 # wr.writerow(temp)
 
     # fd.close()
-    print(url_list)
     print('url crawling finish')
     return url_list
 
@@ -129,20 +135,32 @@ def content_crawl(url):
     req = requests.get(url, headers={'User-Agent':'Mozilla/5.0'})
     html = req.text
     soup = BeautifulSoup(html, 'html.parser')
+    Date = soup.select_one('#ct > div.media_end_head.go_trans > div.media_end_head_info.nv_notrans > div.media_end_head_info_datestamp > div > span')
+    Date=str(Date)
+    Date = Date[105:]
+    Date = Date[:-7]
+
     Title = soup.select_one('#ct > div.media_end_head.go_trans > div.media_end_head_title > h2')
     Title = str(Title)
     Title=Title[36:]
     Title=Title[:-5]
     row = []
+    row.append(Date)
     row.append(Title)
     row.append(url)
-    crawled_data.append(row)
+    if (not Date == '') and (not Title == ''): 
+        crawled_data.append(row)
 
-    fd = open('output.csv', 'a', encoding='utf-8-sig', newline='')
-    wr = csv.writer(fd,delimiter=',')
-    wr.writerow(row)
-    fd.close()
+        fd = open('output.csv', 'a', encoding='utf-8-sig', newline='')
+        wr = csv.writer(fd,delimiter=',')
+        wr.writerow(row)
+        fd.close()
 
+# def add_new_items():
+#     for line in crawled_data:
+#         BoardData(date = line[0], title = line[1], url = line[3])
+
+        
 
 
 
@@ -155,11 +173,13 @@ if __name__=='__main__':
 
     fd = open('output.csv', 'w', encoding='utf-8-sig', newline='')
     wr = csv.writer(fd,delimiter=',')
-    wr.writerow(['Title','URL'])
+    wr.writerow(['Date', 'Title','URL'])
     fd.close()
 
-
-    pool = Pool(processes=8)
+    pool = Pool(processes=4)
     pool.map(content_crawl, url_crawl(startdate, finishdate))
-    print('content crawling finish')
+
+
+
+    print('crawl finish')
     
