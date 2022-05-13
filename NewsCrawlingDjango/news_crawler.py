@@ -9,15 +9,19 @@ import time
 from bs4 import BeautifulSoup
 import requests
 import csv
+import pandas as pd
 import datetime
 from multiprocessing import Pool
-# import os
+import os
 
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', "NewsCrawlingDjango.settings")
-# import django 
-# django.setup()
+from konlpy.tag import Hannanum
+import re
 
-# from crawled_data.models import BoardData
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', "NewsCrawlingDjango.settings")
+import django 
+django.setup()
+
+from crawled_data.models import BoardData
 
 
 global crawled_data
@@ -31,6 +35,7 @@ options.add_argument('lang=ko_KR')
 driver = webdriver.Chrome(options=options)
 
 
+OID = ['032','005','020','021','022','023','025','028','469']
 # 언론사별 10개씩 크롤링
 # 신문사별 oid
 # 경향신문 032
@@ -44,7 +49,6 @@ driver = webdriver.Chrome(options=options)
 # 한겨례 028
 # 한국일보 469
 
-OID = ['032','005','020','021','022','023','025','028','469']
 
 def url_crawl(startdate, finishdate):
     # fd = open('url.csv', 'w', encoding='utf-8', newline='')
@@ -72,8 +76,6 @@ def url_crawl(startdate, finishdate):
     # fd.close()
     print('url crawling finish')
     return url_list
-
-
 
 
 def content_crawl(url):
@@ -157,12 +159,31 @@ def content_crawl(url):
         fd.close()
 
 # def add_new_items():
-#     for line in crawled_data:
-#         BoardData(date = line[0], title = line[1], url = line[3])
+#     data = csv.reader(open('output.csv','r'))
 
+#     for line in data:
+#         print(line)
+#         BoardData(date = line[0], title = line[1], url = line[3]).save()
+#     fd.close()
         
 
+def word_count():
+    data = pd.read_csv('/output.csv',encoding = 'utf-8')
+    hannanum = Hannanum()
+    t_noun= {}
+    Title = []
 
+    data = csv.reader(open('output.csv','r'))
+    for line in data:
+        Title.append(str(line[1]))
+    
+    for i in Title:
+        tmp = hannanum(i).nouns
+        for noun in tmp:
+            if noun in t_noun:
+                t_noun[i] = t_noun[i] + 1
+            else:
+                t_noun[i] = 1
 
 if __name__=='__main__':
     #날짜 설정
@@ -178,8 +199,6 @@ if __name__=='__main__':
 
     pool = Pool(processes=4)
     pool.map(content_crawl, url_crawl(startdate, finishdate))
-
-
-
     print('crawl finish')
-    
+
+    #add_new_items()
