@@ -5,27 +5,23 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait   # 해당 태그를 기다림
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException    # 태그가 없는 예외 처리
-import time
 from bs4 import BeautifulSoup
 import requests
 import csv
-import pandas as pd
 import datetime
 from multiprocessing import Pool
 import os
 
-from konlpy.tag import Hannanum
+from konlpy.tag import Hannanum,Kkma
 import re
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', "NewsCrawlingDjango.settings")
+
 import django 
 django.setup()
 
 from crawled_data.models import BoardData
 
-
-global crawled_data
-crawled_data = list()
 
 #chrome driver 설정
 options = webdriver.ChromeOptions()
@@ -34,7 +30,7 @@ options.add_argument('disable-gpu')
 options.add_argument('lang=ko_KR')
 driver = webdriver.Chrome(options=options)
 
-
+global OID
 OID = ['032','005','020','021','022','023','025','028','469']
 # 언론사별 10개씩 크롤링
 # 신문사별 oid
@@ -49,6 +45,7 @@ OID = ['032','005','020','021','022','023','025','028','469']
 # 한겨례 028
 # 한국일보 469
 
+global crawled_data
 
 def url_crawl(startdate, finishdate):
     # fd = open('url.csv', 'w', encoding='utf-8', newline='')
@@ -80,6 +77,7 @@ def url_crawl(startdate, finishdate):
 
 def content_crawl(url):
     global crawled_data
+    crawled_data = list()
     
     #뉴스기사 저장용 csv 파일 생성
     # fd = open('output.csv', 'w', encoding='utf-8-sig', newline='')
@@ -150,40 +148,25 @@ def content_crawl(url):
     row.append(Date)
     row.append(Title)
     row.append(url)
-    if (not Date == '') and (not Title == ''): 
-        crawled_data.append(row)
+    return row        
 
-        fd = open('output.csv', 'a', encoding='utf-8-sig', newline='')
-        wr = csv.writer(fd,delimiter=',')
-        wr.writerow(row)
-        fd.close()
-
-# def add_new_items():
-#     data = csv.reader(open('output.csv','r'))
-
-#     for line in data:
-#         print(line)
-#         BoardData(date = line[0], title = line[1], url = line[3]).save()
-#     fd.close()
-        
-
-def word_count():
-    data = pd.read_csv('/output.csv',encoding = 'utf-8')
+def word_count(data):
     hannanum = Hannanum()
     t_noun= {}
     Title = []
 
-    data = csv.reader(open('output.csv','r'))
     for line in data:
         Title.append(str(line[1]))
     
     for i in Title:
-        tmp = hannanum(i).nouns
+        tmp = hannanum.nouns(i)
         for noun in tmp:
             if noun in t_noun:
-                t_noun[i] = t_noun[i] + 1
+                t_noun[noun] = t_noun[noun] + 1
             else:
-                t_noun[i] = 1
+                t_noun[noun] = 1
+    
+    return t_noun
 
 if __name__=='__main__':
     #날짜 설정
@@ -192,13 +175,16 @@ if __name__=='__main__':
     input_finish_date = input('끝나는 날짜를 입력하세요(YYYYMMDD) : ')
     finishdate = datetime.date(int(input_finish_date[0:4]), int(input_finish_date[4:6]), int(input_finish_date[6:8]))
 
-    fd = open('output.csv', 'w', encoding='utf-8-sig', newline='')
-    wr = csv.writer(fd,delimiter=',')
-    wr.writerow(['Date', 'Title','URL'])
-    fd.close()
+    crawled_data = []
+    pool = Pool(processes=8)
+    crawled_data.append(pool.map(content_crawl, url_crawl(startdate, finishdate)))
 
-    pool = Pool(processes=4)
-    pool.map(content_crawl, url_crawl(startdate, finishdate))
-    print('crawl finish')
+    news_data=[]
+    for line in crawled_data:
+        for i in range(len(line)):
+            if (not line[i][1]=='') and (not line[i][0]==''):
+                BoardData(date = line[i][0], title = line[i][1], link = line[i][2]).save()
+                news_data.append((line[i][0], line[i][1], line[i][2]))
 
-    #add_new_items()
+
+    print(word_count(news_data))
