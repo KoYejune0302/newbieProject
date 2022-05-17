@@ -76,9 +76,7 @@ def url_crawl(startdate, finishdate):
                 # wr.writerow(temp)
 
     # fd.close()
-    print('url crawling finish')
     return url_list
-
 
 def content_crawl(url):
     global crawled_data
