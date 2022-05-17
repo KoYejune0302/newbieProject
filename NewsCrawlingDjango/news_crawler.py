@@ -15,6 +15,11 @@ import os
 from konlpy.tag import Hannanum,Kkma
 import re
 
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
+
+import matplotlib.font_manager as fm
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', "NewsCrawlingDjango.settings")
 
 import django 
@@ -183,8 +188,13 @@ if __name__=='__main__':
     for line in crawled_data:
         for i in range(len(line)):
             if (not line[i][1]=='') and (not line[i][0]==''):
-                BoardData(date = line[i][0], title = line[i][1], link = line[i][2]).save()
+                #BoardData(date = line[i][0], title = line[i][1], link = line[i][2]).save()
                 news_data.append((line[i][0], line[i][1], line[i][2]))
 
+    cloud_data = word_count(news_data)
 
-    print(word_count(news_data))
+    spwords = set(STOPWORDS)
+    spwords.add('속보')
+    spwords.add('[속보]')
+    wc = WordCloud(max_font_size=200, stopwords = spwords, background_color = 'white', font_path='./font/DX.ttf', width = 1000, height = 800).generate_from_frequencies(cloud_data)
+    wc.to_file('cloud.jpg')

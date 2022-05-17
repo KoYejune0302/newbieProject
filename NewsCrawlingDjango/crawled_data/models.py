@@ -8,3 +8,13 @@ class BoardData(models.Model):
 
     def __str__(self):
         return self.title
+
+class UserInput(models.Model):
+    startdate = models.CharField(max_length = 10)
+    finishdate = models.CharField(max_length = 10)
+
+    def __str__(self):
+        return self.startdate + self.finishdate
+
+class WordCloud(models.Model):
+    cloud = models.CharField(max_length = 10)
