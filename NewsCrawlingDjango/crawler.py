@@ -13,13 +13,13 @@ from multiprocessing import Pool
 from konlpy.tag import Hannanum
 from wordcloud import WordCloud, STOPWORDS
 
-# import os
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', "NewsCrawlingDjango.settings")
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', "NewsCrawlingDjango.settings")
 
-# import django 
-# django.setup()
+import django 
+django.setup()
 
-# from crawled_data.models import BoardData
+from crawled_data.models import BoardData
 
 #chrome driver 설정
 options = webdriver.ChromeOptions()
@@ -96,36 +96,45 @@ def cloud(data):
 
 def find_url(words, news):
     a = dict()
+    b = dict()
     for word in words:
         for line in news:
             if word in line[1]:
                 a[word] = line[2]
+                b[word] = line[1]
                 break
-    return a
+    return a,b
 
-if __name__=='__main__':
-    input_start_date = input('시작 날짜를 입력하세요(YYYYMMDD) : ')
+def crawl_news(input_start_date, input_finish_date):
+    #input_start_date = input('시작 날짜를 입력하세요(YYYYMMDD) : ')
     startdate = datetime.date(int(input_start_date[0:4]), int(input_start_date[4:6]), int(input_start_date[6:8]))
-    input_finish_date = input('끝나는 날짜를 입력하세요(YYYYMMDD) : ')
+    #input_finish_date = input('끝나는 날짜를 입력하세요(YYYYMMDD) : ')
     finishdate = datetime.date(int(input_finish_date[0:4]), int(input_finish_date[4:6]), int(input_finish_date[6:8]))
 
     crawled_data = []
-    pool = Pool(processes=8)
+    pool = Pool(processes=16)
     crawled_data.append(pool.map(content_crawl, url_crawl(startdate, finishdate)))
 
     news_data=[]
     for line in crawled_data:
         for i in range(len(line)):
             if (not line[i][1]=='') and (not line[i][0]==''):
-                #BoardData(date = line[i][0], title = line[i][1], link = line[i][2]).save()
                 news_data.append((line[i][0], line[i][1], line[i][2]))
 
     cloud_data = word_count(news_data)
-    wc = cloud(cloud_data)
+    spwords = set(STOPWORDS)
+    spwords.add('속보')
+    spwords.add('[속보]')
+    spwords.add('단독')
+    spwords.add('[단독]')
+    wc = WordCloud(max_font_size=200, stopwords = spwords, background_color = 'white', font_path='./DX.ttf', width = 1000, height = 800).generate_from_frequencies(cloud_data)
+    #wc = cloud(cloud_data)
     wc.to_file('cloud.jpg')
 
     sorted_dict = sorted(cloud_data.items(), key = lambda item: item[1], reverse = True)
     word_to_find = [sorted_dict[0][0], sorted_dict[1][0], sorted_dict[2][0]]
 
-    url_list = find_url(word_to_find, news_data)
-    print(url_list)
+    url_list, title_list = find_url(word_to_find, news_data)
+    for word in word_to_find:
+        BoardData(start = input_start_date, finish = input_finish_date, title = title_list[word], link = url_list[word]).save()
+    print(url_list, title_list)

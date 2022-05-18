@@ -10,8 +10,3 @@ class UserInputSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserInput
         fields = ['startdate', 'finishdate']
-
-# class WordCloudSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = WordCloud
-#         fields = '__all__'

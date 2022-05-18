@@ -2,6 +2,8 @@ from django.db import models
 
 # Create your models here.
 class BoardData(models.Model):
+    start = models.CharField(max_length=10, null = 'True')
+    finish = models.CharField(max_length=10, null = 'True')
     title = models.CharField(max_length=300)
     link = models.URLField()
 
@@ -14,6 +16,3 @@ class UserInput(models.Model):
 
     def __str__(self):
         return self.startdate +'>>'+ self.finishdate
-
-# class WordCloud(models.Model):
-#     cloud = models.CharField(max_length = 10)
