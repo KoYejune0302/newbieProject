@@ -9,4 +9,4 @@ class BoardDataSerializer(serializers.ModelSerializer):
 class UserInputSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserInput
-        fields = ['startdate', 'finishdate']
+        fields = '__all__'

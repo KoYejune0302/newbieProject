@@ -113,24 +113,37 @@ class UserInputViewSet(viewsets.ModelViewSet):
         # pool = Pool(processes=16)
         # crawled_data.append(pool.map(content_crawl, url_crawl(startdate, finishdate)))
 
-        news_data=[]
-        # for line in crawled_data:
-        #     for i in range(len(line)):
-        #         if (not line[i][1]=='') and (not line[i][0]==''):
-        #             news_data.append((line[i][0], line[i][1], line[i][2]))
-        
+        news_data=[]        
         for line in crawled_data:
-            if (not line[1]=='') and (not line[0]==''):
+            if (not line[0]=='') and (not line[1]==''):
                 news_data.append((line[0], line[1], line[2]))
 
         cloud_data = word_count(news_data)
+        spwords = set(STOPWORDS)
+        spwords.add('속보')
+        spwords.add('[속보]')
+        spwords.add('단독')
+        spwords.add('[단독]')
+        spwords.add('포토')
+        spwords.add('[포토]')
+        #wc = WordCloud(max_font_size=150, stopwords = spwords, background_color = 'white', font_path='./font/DX.ttf', width = 1000, height = 800).generate_from_frequencies(cloud_data)
+        #wc.to_file('cloud.jpg')
 
         sorted_dict = sorted(cloud_data.items(), key = lambda item: item[1], reverse = True)
         word_to_find = [sorted_dict[0][0], sorted_dict[1][0], sorted_dict[2][0]]
 
         url_list, title_list = find_url(word_to_find, news_data)
-        for word in word_to_find:
-            BoardData(start = input_start_date, finish = input_finish_date,title = title_list[word], link = url_list[word]).save()
+        BoardData(start = input_start_date,
+            finish = input_finish_date,
+            title1 = title_list[word_to_find[0]],
+            link1 = url_list[word_to_find[0]],
+            title2 = title_list[word_to_find[1]],
+            link2 = url_list[word_to_find[1]],
+            title3 = title_list[word_to_find[2]],
+            link3 = url_list[word_to_find[2]]).save()
+
+        serializer.save(startdate = input_start_date)
+        serializer.save(finishdate = input_finish_date)
 
 # class WordCloudViewSet(viewsets.ModelViewSet):
 #     serializer_class = WordCloud

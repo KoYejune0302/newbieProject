@@ -4,8 +4,13 @@ from django.db import models
 class BoardData(models.Model):
     start = models.CharField(max_length=10, null = 'True')
     finish = models.CharField(max_length=10, null = 'True')
-    title = models.CharField(max_length=300)
-    link = models.URLField()
+    title1 = models.CharField(max_length=300, null = 'True')
+    link1 = models.URLField(null = 'True')
+    title2 = models.CharField(max_length=300, null = 'True')
+    link2 = models.URLField(null = 'True')
+    title3 = models.CharField(max_length=300, null = 'True')
+    link3 = models.URLField(null = 'True')
+    cloud = models.ImageField(blank=True)
 
 
     def __str__(self):
