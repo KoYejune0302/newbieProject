@@ -1,36 +1,40 @@
 import './App.css';
 import React, { useState } from 'react'
 import Board from './Board.js'
-import axios from 'axios'
+import axios from 'axios';
 
 const App = () =>{
   
   const [inputList, setInputList] = useState({startdate : "", finishdate : "" });
-  const [dataList, setDataList] = useState({startdate : "", finishdate : "" });
-
+  const [state, setState] = useState(false)
+  const [text, setText] = useState([]);
   const {startdate, finishdate} = inputList;
 
   const changed = (e) =>{
     const {value, name} = e.target;
     setInputList({...inputList, [name]: value});
-    console.log(inputList);
   };
 
   const clickHandler_crawl = () =>{
-    // fetch('https://localhost:8000/user', {
-    //   method: 'post',
-    //   body: JSON.stringify({
-    //       startdate: {startdate},
-    //       finishdate: {finishdate}
-    //   })
-    // })
-    // .then(res => res.json())
-    // axios.post("http://127.0.0.1:8000/user", {
-    //     startdate: {startdate},
-    //     finishdate: {finishdate},
-    // })
-    console.log({startdate},{finishdate})  
+    console.log({startdate},{finishdate});
+    setState(true);
+    axios.post("http://127.0.0.1:8000/user/", {
+            startdate: startdate,
+            finishdate: finishdate,
+          });
   };
+
+  // axios.get("http://127.0.0.1:8000/board/")
+  //       .then((response) => {
+  //       setText([...response.data]);
+  //       })
+  //       .catch(function (error) {
+  //       console.log(error);
+  //       });
+    
+  // const result = text.filter((e) => (e.start === startdate) && (e.finish === finishdate));
+  
+  // (result.length !== 0) ? (setState(false)) : (console.log('???'));
 
   return(
     <div className = 'App'>
@@ -52,7 +56,11 @@ const App = () =>{
       <br></br>
       <button onClick = {clickHandler_crawl}>Crawl News</button>
       <br></br>
-      <Board startdate={startdate} finishdate={finishdate} />
+      {(state) ? (
+        <p>Is Loading...</p>
+      ) : (
+        <Board startdate={startdate} finishdate={finishdate}/>
+      )}
     </div>
   );
 };

@@ -12,20 +12,13 @@ import datetime
 from multiprocessing import Pool
 import os
 
-from konlpy.tag import Hannanum,Kkma
+from konlpy.tag import Hannanum
 import re
 
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 
 import matplotlib.font_manager as fm
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', "NewsCrawlingDjango.settings")
-
-import django 
-django.setup()
-
-from crawled_data.models import BoardData
 
 
 #chrome driver 설정

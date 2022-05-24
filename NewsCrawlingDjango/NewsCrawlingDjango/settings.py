@@ -57,8 +57,10 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
-    'http://localhost:8000'
+    'http://localhost:8000',
+    'http://127.0.0.1:3000',
 ]
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'NewsCrawlingDjango.urls'
 
@@ -90,10 +92,20 @@ WSGI_APPLICATION = 'NewsCrawlingDjango.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'newbie_project',
+        'USER': 'root',
+        'PASSWORD': 'pwkyj0302!',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
