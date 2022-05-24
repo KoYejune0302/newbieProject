@@ -140,6 +140,11 @@ class UserInputViewSet(viewsets.ModelViewSet):
         
 
         cloud_data = word_count(news_data)
+        xList = ['속보','단독','포토','[속보]','[단독]','[포토]']
+        for word in xList:
+            if word in cloud_data.keys():
+                cloud_data[word]=0
+        
         spwords = set(STOPWORDS)
         spwords.add('속보')
         spwords.add('[속보]')
