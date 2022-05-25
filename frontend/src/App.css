@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+
+h1 {
+  color: #61dafb;
+  font-family : 'Space Mono', monospace;
+  font-style : bold;
+  font-size: large;
+}
+
+input {
+  margin : 3px
+}

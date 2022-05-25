@@ -24,18 +24,6 @@ const App = () =>{
           });
   };
 
-  // axios.get("http://127.0.0.1:8000/board/")
-  //       .then((response) => {
-  //       setText([...response.data]);
-  //       })
-  //       .catch(function (error) {
-  //       console.log(error);
-  //       });
-    
-  // const result = text.filter((e) => (e.start === startdate) && (e.finish === finishdate));
-  
-  // (result.length !== 0) ? (setState(false)) : (console.log('???'));
-
   return(
     <div className = 'App'>
       <header>
@@ -56,11 +44,7 @@ const App = () =>{
       <br></br>
       <button onClick = {clickHandler_crawl}>Crawl News</button>
       <br></br>
-      {(state) ? (
-        <p>Is Loading...</p>
-      ) : (
-        <Board startdate={startdate} finishdate={finishdate}/>
-      )}
+      <Board startdate={startdate} finishdate={finishdate} state={state}/>
     </div>
   );
 };
