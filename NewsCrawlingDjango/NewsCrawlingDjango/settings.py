@@ -103,9 +103,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'newbie_project',
         'USER': 'root',
-        'PASSWORD': 'pwkyj0302!',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'PASSWORD': 'tnfqkrtm',
+        'HOST': 'ssal.sparcs.org',
+        'PORT': '64534',
     }
 }
 

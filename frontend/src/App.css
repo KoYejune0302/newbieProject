@@ -37,15 +37,96 @@
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
 
-h1 {
-  color: #61dafb;
-  font-family : 'Space Mono', monospace;
-  font-style : bold;
-  font-size: large;
+body {
+  font-family: 'Nanum Myeongjo', serif;
+  background: #ffffff;
 }
 
-input {
-  margin : 3px
+.row1 {
+  margin-top : 5%;
+}
+
+.row2{
+  clear:both;
+}
+
+.col1 {
+  float:left;
+  margin-left:28%;
+}
+
+h2 {
+  font-weight:lighter;
+}
+
+.col2 {
+  margin-left:7%;
+  float:left;
+}
+
+.pb-3{
+  text-align:left;
+}
+
+.form-style input{
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 16px;
+  border: 0;
+  height: 50px;
+  width: 255px;
+  border-radius: 0;
+  border-bottom:1px solid #fafafa;
+  margin-bottom:1px;
+}
+
+.form-style input:focus{
+  font-family: 'Nanum Myeongjo', serif;
+  border-bottom: 1px solid #007bff;
+  box-shadow: none;
+  outline: 0;
+  background-color: #fafafa;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
+
+button{
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 20px;
+  height: 40px;
+  width: 200px;
+  margin:20px;
+  text-align: center;
+  vertical-align: center;
+  padding: 100px;
+  background: whitesmoke;
+  display: table-cell;
+}
+
+.w-btn {
+  position: relative;
+  border: none;
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  font-weight: 300;
+  transition: 0.25s;
+}
+
+.w-btn:active {
+  transform: scale(1.5);
+}
+
+.w-btn:hover {
+  letter-spacing: 2px;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.w-btn-gra1 {
+  background: linear-gradient(-45deg, #33ccff 0%, #ff99cc 100%);
+  color: white;
 }
