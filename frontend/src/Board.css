@@ -7,6 +7,10 @@
     margin : 2%;
 }
 
+.Board{
+    margin-left: 28%;
+}
+
 label {
     color: #000000;
     font-family: 'Nanum Myeongjo', serif;

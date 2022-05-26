@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import "./Board.css"
 import axios from 'axios';
-
+ 
 const Board = ({startdate, finishdate, state}) => {
     const [text, setText] = useState([]);
 
