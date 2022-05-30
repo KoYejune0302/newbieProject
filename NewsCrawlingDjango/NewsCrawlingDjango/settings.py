@@ -89,27 +89,16 @@ STATICFILES_DIRS = [
 WSGI_APPLICATION = 'NewsCrawlingDjango.wsgi.application'
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'newbie_project',
-#         'USER': 'root',
-#         'PASSWORD': 'tnfqkrtm',
-#         'HOST': 'ssal.sparcs.org',
-#         'PORT': '64534',
-#     }
-# }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'newbie_project',
-        'USER': 'root',
-        'PASSWORD': 'pwkyj0302!',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
+ DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': {NAME},
+         'USER': {USER},
+         'PASSWORD': {PASSWORD},
+         'HOST': {HOST},
+         'PORT': {PORT},
+     }
+ }
 
 
 
